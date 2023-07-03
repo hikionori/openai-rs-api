@@ -1,5 +1,7 @@
 [package]
 name = "openai-rs-api"
+description = "A Rust wrapper for the OpenAI API"
+license = "MIT"
 version = "0.1.0"
 edition = "2021"
 
