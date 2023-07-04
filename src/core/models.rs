@@ -6,55 +6,55 @@ pub mod list_models {
     #[derive(Debug, Deserialize)]
     pub struct ModelPermission {
         /// The ID of the permission.
-        id: String,
+        pub id: String,
         /// The type of object returned by the API. In this case, it will always be "model_permission".
-        object: String,
+        pub object: String,
         /// The Unix timestamp (in seconds) when the permission was created.
-        created: i64,
+        pub created: i64,
         /// Whether the permission allows creating engines.
-        allow_create_engine: bool,
+        pub allow_create_engine: bool,
         /// Whether the permission allows sampling.
-        allow_sampling: bool,
+        pub allow_sampling: bool,
         /// Whether the permission allows log probabilities.
-        allow_logprobs: bool,
+        pub allow_logprobs: bool,
         /// Whether the permission allows search indices.
-        allow_search_indices: bool,
+        pub allow_search_indices: bool,
         /// Whether the permission allows viewing.
-        allow_view: bool,
+        pub allow_view: bool,
         /// Whether the permission allows fine-tuning.
-        allow_fine_tuning: bool,
+        pub allow_fine_tuning: bool,
         /// The ID of the organization that the permission belongs to.
-        organization: String,
+        pub organization: String,
         /// The ID of the group that the permission belongs to.
-        group: Option<String>,
+        pub group: Option<String>,
         /// Whether the permission is blocking.
-        is_blocking: bool,
+        pub is_blocking: bool,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct Model {
         /// The ID of the model.
-        id: String,
+        pub id: String,
         /// The type of object returned by the API. In this case, it will always be "model".
-        object: String,
+        pub object: String,
         /// The Unix timestamp (in seconds) when the model was created.
-        created: i64,
+        pub created: i64,
         /// The ID of the organization that owns the model.
-        owned_by: String,
+        pub owned_by: String,
         /// A list of `ModelPermission` objects representing the permissions for the model.
-        permission: Vec<ModelPermission>,
+        pub permission: Vec<ModelPermission>,
         /// The ID of the root model that this model was created from.
-        root: String,
+        pub root: String,
         /// The ID of the parent model that this model was created from.
-        parent: Option<String>,
+        pub parent: Option<String>,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct ModelList {
         /// The type of object returned by the API. In this case, it will always be "list".
-        object: String,
+        pub object: String,
         /// A vector of `Model` objects representing the models returned by the API.
-        data: Vec<Model>,
+        pub data: Vec<Model>,
     }
 
 }
@@ -138,72 +138,72 @@ pub mod completions {
         /// }
         /// ```
         ///
-        model: String,
+        pub model: String,
         /// The prompt(s) to generate completions for, encoded as a string, array of strings,
         /// array of tokens, or array of token arrays.
         ///
         /// Note that <|endoftext|> is the document separator that the model sees during training,
         /// so if a prompt is not specified the model will generate as if from the beginning of a new document.
-        prompt: String,
+        pub prompt: String,
         /// The maximum number of [tokens](https://platform.openai.com/tokenizer) to generate in the completion.
         ///
         /// The token count of your prompt plus `max_tokens` cannot exceed the model's context length.
         /// [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)
         /// for counting tokens.
         #[serde(skip_serializing_if = "Option::is_none")]
-        max_tokens: Option<i32>,
+        pub max_tokens: Option<i32>,
         /// What sampling temperature to use, between 0 and 2.
         /// Higher values like 0.8 will make the output more random, while lower values
         /// like 0.2 will make it more focused and deterministic.
         ///
         /// We generally recommend altering this or `top_p` but not both.
         #[serde(skip_serializing_if = "Option::is_none")]
-        temperature: Option<f32>,
+        pub temperature: Option<f32>,
         /// The suffix that comes after a completion of inserted text.
         #[serde(skip_serializing_if = "Option::is_none")]
-        suffix: Option<String>,
+        pub suffix: Option<String>,
         /// An alternative to sampling with temperature, called nucleus sampling,
         /// where the model considers the results of the tokens with top_p probability mass.
         /// So 0.1 means only the tokens comprising the top 10% probability mass are considered.
         ///
         /// We generally recommend altering this or `temperature` but not both.
         #[serde(skip_serializing_if = "Option::is_none")]
-        top_p: Option<f32>,
+        pub top_p: Option<f32>,
         /// How many completions to generate for each prompt.
         ///
         /// Note: Because this parameter generates many completions, it can quickly consume your token quota.
         /// Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
         #[serde(skip_serializing_if = "Option::is_none")]
-        n: Option<i32>,
+        pub n: Option<i32>,
         /// Whether to stream back partial progress. If set, tokens
         /// will be sent as data-only server-sent events as they become available,
         /// with the stream terminated by a `data: [DONE]` message.
         /// [Example Python code.](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb)
         #[serde(skip_serializing_if = "Option::is_none")]
-        stream: Option<bool>,
+        pub stream: Option<bool>,
         /// Include the log probabilities on the `logprobs` most likely tokens, as well the chosen tokens.
         /// For example, if `logprobs` is 5, the API will return a list of the 5 most likely tokens.
         /// The API will always return the `logprob` of the sampled token, so there may be up to `logprobs+1` elements in the response.
         ///
         /// The maximum value for logprobs is 5.
         #[serde(skip_serializing_if = "Option::is_none")]
-        logprobs: Option<i32>,
+        pub logprobs: Option<i32>,
         /// Up to 4 sequences where the API will stop generating further tokens.
         /// The returned text will not contain the stop sequence.
         #[serde(skip_serializing_if = "Option::is_none")]
-        stop: Option<String>,
+        pub stop: Option<String>,
         /// Number between -2.0 and 2.0. Positive values penalize new tokens based on whether
         /// they appear in the text so far, increasing the model's likelihood to talk about new topics.
         ///
         /// [See more information about frequency and presence penalties.](https://platform.openai.com/docs/api-reference/parameter-details)
         #[serde(skip_serializing_if = "Option::is_none")]
-        presence_penalty: Option<f32>,
+        pub presence_penalty: Option<f32>,
         /// Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency
         /// in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
         ///
         /// [See more information about frequency and presence penalties.](https://platform.openai.com/docs/api-reference/parameter-details)
         #[serde(skip_serializing_if = "Option::is_none")]
-        frequency_penalty: Option<f32>,
+        pub frequency_penalty: Option<f32>,
         /// Generates `best_of` completions server-side and returns the "best" (the one with the highest log probability per token). Results cannot be streamed.
         ///
         /// When used with `n`, `best_of` controls the number of candidate completions and `n` specifies how many to return – `best_of` must be greater than `n`.
@@ -211,7 +211,7 @@ pub mod completions {
         /// Note: Because this parameter generates many completions, it can quickly consume your token quota.
         /// Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
         #[serde(skip_serializing_if = "Option::is_none")]
-        best_of: Option<i32>,
+        pub best_of: Option<i32>,
         /// Modify the likelihood of specified tokens appearing in the completion.
         ///
         /// Accepts a json object that maps tokens (specified by their token ID in the GPT tokenizer)
@@ -224,53 +224,53 @@ pub mod completions {
         ///
         /// As an example, you can pass `{"50256": -100}` to prevent the <|endoftext|> token from being generated.
         #[serde(skip_serializing_if = "Option::is_none")]
-        logit_bias: Option<serde_json::Value>,
+        pub logit_bias: Option<serde_json::Value>,
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
-        user: Option<String>,
+        pub user: Option<String>,
         /// Echo back the prompt in addition to the completion
         #[serde(skip_serializing_if = "Option::is_none")]
-        echo: Option<bool>,
+        pub echo: Option<bool>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct CompletionResponse {
         /// The unique identifier for the completion request.
-        id: String,
+        pub id: String,
         /// The type of object, which is always "text_completion".
-        object: String,
+        pub object: String,
         /// The Unix timestamp (in seconds) when the completion request was created.
-        created: i64,
+        pub created: i64,
         /// The ID of the model used to generate the completion.
-        model: String,
+        pub model: String,
         /// A vector of `CompletionChoice` objects, each representing a possible completion.
-        choices: Vec<CompletionChoice>,
+        pub choices: Vec<CompletionChoice>,
         /// An object containing usage statistics for the completion request.
-        usage: Usage,
+        pub usage: Usage,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct CompletionChoice {
         /// The generated text for this completion choice.
-        text: String,
+        pub text: String,
         /// The index of this completion choice in the list of all possible choices.
-        index: i32,
+        pub index: i32,
         /// The log probabilities of the tokens in the generated text.
         /// If the `logprobs` parameter was not set in the request, this field will be `None`.
-        logprobs: Option<i32>,
+        pub logprobs: Option<i32>,
         /// The reason why the completion was finished.
         /// Possible values are "stop", "length", "temperature", "top_p", "nucleus_sampling", and "incomplete".
-        finish_reason: String,
+        pub finish_reason: String,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Usage {
         /// prompt_tokens: an integer representing the number of tokens in the prompt used for the completion request.
-        prompt_tokens: i32,
+        pub prompt_tokens: i32,
         /// completion_tokens: an integer representing the number of tokens in the generated completion text.
-        completion_tokens: i32,
+        pub completion_tokens: i32,
         /// total_tokens: an integer representing the total number of tokens used in the completion request, including both the prompt and the generated completion text.
-        total_tokens: i32,
+        pub total_tokens: i32,
     }
 }
 
@@ -350,17 +350,17 @@ pub mod chat {
     pub struct Function {
         /// The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes,
         /// with a maximum length of 64.
-        name: String,
+        pub name: String,
         /// The description of what the function does.
         #[serde(skip_serializing_if = "Option::is_none")]
-        description: Option<String>,
+        pub description: Option<String>,
         /// The parameters the functions accepts, described as a JSON Schema object.
         /// See the [guide](https://platform.openai.com/docs/guides/gpt/function-calling) for examples,
         /// and the [JSON Schema reference](https://json-schema.org/understanding-json-schema/) for
         /// documentation about the format.
         #[serde(skip_serializing_if = "Option::is_none")]
         #[serde(rename = "parameters")]
-        params: Option<serde_json::Value>,
+        pub params: Option<serde_json::Value>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -380,11 +380,11 @@ pub mod chat {
     #[derive(Debug, Serialize, Deserialize)]
     pub struct CompletionChoice {
         /// The index of this choice in the list of choices returned by the API.
-        index: i32,
+        pub index: i32,
         /// The message generated by the API for this choice.
-        message: Message,
+        pub message: Message,
         /// The reason why the API stopped generating further tokens for this choice.
-        finish_reason: String,
+        pub finish_reason: String,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -409,9 +409,9 @@ pub mod chat {
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Usage {
-        prompt_tokens: i32,
-        completion_tokens: i32,
-        total_tokens: i32,
+        pub prompt_tokens: i32,
+        pub completion_tokens: i32,
+        pub total_tokens: i32,
     }
 }
 
@@ -420,86 +420,86 @@ pub mod images {
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageCreateParameters {
-        prompt: String,
+        pub prompt: String,
         /// The number of images to generate. Must be between 1 and 10.
         #[serde(skip_serializing_if = "Option::is_none")]
         #[serde(rename = "n")]
-        num_images: Option<i32>,
+        pub num_images: Option<i32>,
         /// The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024.
         #[serde(skip_serializing_if = "Option::is_none")]
         #[serde(rename = "size")]
-        image_size: Option<String>,
+        pub image_size: Option<String>,
         /// The format in which the generated images are returned. Must be one of `url` or `b64_json`.
         #[serde(skip_serializing_if = "Option::is_none")]
-        response_format: Option<String>, // url of b64_json
+        pub response_format: Option<String>, // url of b64_json
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
         /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
-        user: Option<String>,
+        pub user: Option<String>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageEditParameters {
         /// The image to edit. Must be a valid PNG file, less than 4MB, and square.
         /// If mask is not provided, image must have transparency, which will be used as the mask.
-        image: String,
+        pub image: String,
         /// An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where `image` should be edited.
         /// Must be a valid PNG file, less than 4MB, and have the same dimensions as `image`.
         #[serde(skip_serializing_if = "Option::is_none")]
-        mask: Option<String>,
+        pub mask: Option<String>,
         /// A text description of the desired image(s). The maximum length is 1000 characters.
-        prompt: String,
+        pub prompt: String,
         /// The number of images to generate. Must be between 1 and 10.
         #[serde(skip_serializing_if = "Option::is_none")]
         #[serde(rename = "n")]
-        num_images: Option<i32>,
+        pub num_images: Option<i32>,
         /// The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024.
         #[serde(skip_serializing_if = "Option::is_none")]
         #[serde(rename = "size")]
-        image_size: Option<String>,
+        pub image_size: Option<String>,
         /// The format in which the generated images are returned. Must be one of `url` or `b64_json`.
         #[serde(skip_serializing_if = "Option::is_none")]
-        response_format: Option<String>, // url of b64_json
+        pub response_format: Option<String>, // url of b64_json
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
         /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
-        user: Option<String>,
+        pub user: Option<String>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageVariationParameters {
         /// The image to edit. Must be a valid PNG file, less than 4MB, and square.
         /// If mask is not provided, image must have transparency, which will be used as the mask.
-        image: String,
+        pub image: String,
         /// The number of images to generate. Must be between 1 and 10.
         #[serde(skip_serializing_if = "Option::is_none")]
         #[serde(rename = "n")]
-        num_images: Option<i32>,
+        pub num_images: Option<i32>,
         /// The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024.
         #[serde(skip_serializing_if = "Option::is_none")]
         #[serde(rename = "size")]
-        image_size: Option<String>,
+        pub image_size: Option<String>,
         /// The format in which the generated images are returned. Must be one of `url` or `b64_json`.
         #[serde(skip_serializing_if = "Option::is_none")]
-        response_format: Option<String>, // url of b64_json
+        pub response_format: Option<String>, // url of b64_json
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
         /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
-        user: Option<String>,
+        pub user: Option<String>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageResponse {
         /// The timestamp (in seconds since the Unix epoch) when the request was made.
-        created: usize,
+        pub created: usize,
         /// A vector of ImageData structs containing the URLs of the generated images.
-        data: Vec<ImageData>,
+        pub data: Vec<ImageData>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageData {
         /// The URL of the generated image.
-        url: String,
+        pub url: String,
     }
 
 }
