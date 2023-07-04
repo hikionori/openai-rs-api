@@ -424,6 +424,13 @@ impl OpenAI {
         Ok(serde_json::from_slice::<TextResponse>(&result).expect("Failed to parse text response"))
     }
 
+    /// The function `list_files` makes an asynchronous HTTP GET request to the OpenAI API to retrieve a
+    /// list of files and returns the parsed result.
+    ///
+    /// Returns:
+    ///
+    /// The function `list_files` returns a `Result` containing either a `FileList` or a boxed dynamic
+    /// error (`Box<dyn Error>`).
     pub async fn list_files(self) -> Result<FileList, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/files");
@@ -441,6 +448,19 @@ impl OpenAI {
         Ok(serde_json::from_slice::<FileList>(&result).expect("Failed to parse file list"))
     }
 
+    /// The `upload_files` function in Rust uploads files to the OpenAI API and returns the file data.
+    ///
+    /// Arguments:
+    ///
+    /// * `parameters`: The `parameters` parameter in the `upload_files` function is of type
+    /// `FileUpload`. It represents the data that needs to be uploaded to the server. The `FileUpload`
+    /// struct should contain the necessary information for the file upload, such as the file content,
+    /// file name, and file type
+    ///
+    /// Returns:
+    ///
+    /// The function `upload_files` returns a `Result` containing either a `FileData` object or an error
+    /// (`Box<dyn Error>`).
     pub async fn upload_files(self, parameters: FileUpload) -> Result<FileData, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/files");
@@ -458,6 +478,19 @@ impl OpenAI {
         Ok(serde_json::from_slice::<FileData>(&result).expect("Failed to parse file data"))
     }
 
+    /// The function `delete_file` is an asynchronous function in Rust that sends a DELETE request to the
+    /// OpenAI API to delete a file.
+    ///
+    /// Arguments:
+    ///
+    /// * `file_id`: The `file_id` parameter is a string that represents the unique identifier of the
+    /// file you want to delete. It is used to construct the URL for the DELETE request to the OpenAI
+    /// API.
+    ///
+    /// Returns:
+    ///
+    /// The function `delete_file` returns a `Result` containing either a `DeleteResponse` or a boxed
+    /// dynamic error (`Box<dyn Error>`).
     pub async fn delete_file(self, file_id: String) -> Result<DeleteResponse, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/files/{}", file_id);
@@ -476,6 +509,17 @@ impl OpenAI {
             .expect("Failed to parse delete response"))
     }
 
+    /// The `retrieve_file` function retrieves file data from the OpenAI API using the provided file ID.
+    ///
+    /// Arguments:
+    ///
+    /// * `file_id`: The `file_id` parameter is a unique identifier for the file you want to retrieve.
+    /// It is used to construct the URL for the API request to retrieve the file data.
+    ///
+    /// Returns:
+    ///
+    /// The function `retrieve_file` returns a `Result` containing either a `FileData` object or an
+    /// error (`Box<dyn Error>`).
     pub async fn retrieve_file(self, file_id: String) -> Result<FileData, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/files/{}", file_id);
@@ -493,6 +537,20 @@ impl OpenAI {
         Ok(serde_json::from_slice::<FileData>(&result).expect("Failed to parse file data"))
     }
 
+    /// The function `retrieve_file_content` retrieves the content of a file from the OpenAI API using a
+    /// provided file ID.
+    ///
+    /// Arguments:
+    ///
+    /// * `file_id`: The `file_id` parameter is a unique identifier for the file you want to retrieve
+    /// the content of. It is used to construct the URL for the API request to fetch the file content.
+    ///
+    /// Returns:
+    ///
+    /// The function `retrieve_file_content` returns a `Result` containing a `String` representing the
+    /// content of the file with the given `file_id`. The `Ok` variant of the `Result` contains the file
+    /// content as a `String`, while the `Err` variant contains a boxed dynamic error (`Box<dyn
+    /// Error>`).
     pub async fn retrieve_file_content(self, file_id: String) -> Result<String, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/files/{}/content", file_id);
