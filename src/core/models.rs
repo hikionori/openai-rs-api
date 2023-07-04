@@ -485,3 +485,62 @@ pub mod embeddings {
         total_tokens: i32,
     }
 }
+
+pub mod audio {
+    use serde::{Deserialize, Serialize};
+
+    #[derive(Debug, Serialize)]
+    pub struct TranscriptionParameters {
+        /// The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+        file: String,
+        /// ID of the model to use. Only `whisper-1` is currently available.
+        model: String,
+        /// An optional text to guide the model's style or continue a previous audio segment. The prompt should match the audio language.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        prompt: Option<String>,
+        /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        respone_format: Option<String>,
+        /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 
+        /// will make it more focused and deterministic. If set to 0, the model will use log probability to automatically increase the temperature 
+        /// until certain thresholds are hit.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        temperature: Option<f32>,
+        /// The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        language: Option<String>,
+    }
+
+    #[derive(Debug, Serialize)]
+    pub struct TranslationParameters {
+        /// The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
+        file: String,
+        /// ID of the model to use. Only `whisper-1` is currently available.
+        model: String,
+        /// An optional text to guide the model's style or continue a previous audio segment. The prompt should match the audio language.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        prompt: Option<String>,
+        /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
+        /// The default is json.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        respone_format: Option<String>,
+        /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2
+        /// will make it more focused and deterministic. If set to 0, the model will use log probability to automatically increase the temperature
+        /// until certain thresholds are hit.
+        /// The default is 1.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        temperature: Option<f32>,        
+    }
+
+    #[derive(Debug, Deserialize)]
+    pub struct TextResponse {
+        text: String,
+    }
+
+}
+
+pub mod files {}
+
+pub mod fine_tunes {}
+
+pub mod moderations {}

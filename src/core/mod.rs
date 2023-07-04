@@ -12,7 +12,7 @@ use self::models::{
     edits::{EditParameters, EditResponse},
     embeddings::{EmbeddingParameters, EmbeddingResponse},
     images::{ImageCreateParameters, ImageEditParameters, ImageResponse, ImageVariationParameters},
-    list_models::{Model, ModelList},
+    list_models::{Model, ModelList}, audio::{TranscriptionParameters, TextResponse, TranslationParameters},
 };
 
 pub struct OpenAI {
@@ -353,4 +353,45 @@ impl OpenAI {
         Ok(serde_json::from_slice::<EmbeddingResponse>(&result)
             .expect("Failed to parse embedding response"))
     }
+
+    pub async fn create_transcription(
+        self, parameters: TranscriptionParameters,
+    ) -> Result<TextResponse, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/audio/transcriptions");
+
+        let result = client
+            .post(url)
+            .insert_header(("Content-Type", "application/json"))
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<TextResponse>(&result).expect("Failed to parse text response"))
+    }
+
+    pub async fn create_translation(
+        self, parameters: TranslationParameters,
+    ) -> Result<TextResponse, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/audio/translations");
+
+        let result = client
+            .post(url)
+            .insert_header(("Content-Type", "application/json"))
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<TextResponse>(&result).expect("Failed to parse text response"))
+    }
+
 }
