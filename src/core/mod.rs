@@ -1,4 +1,4 @@
-mod models;
+pub mod models;
 
 use std::{error::Error, sync::Arc};
 
@@ -11,6 +11,7 @@ use self::models::{
     completions::{CompletionParameters, CompletionResponse},
     edits::{EditParameters, EditResponse},
     list_models::{Model, ModelList},
+    images::{ImageParameters, ImageResponse},
 };
 
 pub struct OpenAI {
@@ -112,22 +113,19 @@ impl OpenAI {
         Ok(serde_json::from_slice::<Model>(&result).expect("Failed to parse model response"))
     }
 
-    /// The function `create_chat_completions` sends a POST request to the OpenAI API to generate chat
-    /// completions based on the provided parameters.
+    
+    /// The function `create_chat_completions` sends a POST request to the OpenAI API to generate chat completions
+    /// based on the given parameters.
     /// 
     /// Arguments:
     /// 
-    /// * `parameters`: The `parameters` parameter in the `create_chat_completions` is struct
-    /// `ChatParameters`. It represents the input data for the chat completion API. The `ChatParameters`
-    /// struct contains the following fields:
-    /// ```rust
-    ///  model: String,
-    ///  messages: Vec<Message>,
-    /// ```
+    /// * `parameters`: The `parameters` parameter in the `create_chat_completions` function is of type
+    /// `ChatParameters`. It is an input parameter that contains the information required to
+    /// generate chat completions using the OpenAI API.
+    /// 
     /// Returns:
     /// 
-    /// a `Result` type with the `Ok` variant containing a `ChatResponse` object if the operation is
-    /// successful, or the `Err` variant containing a `Box<dyn Error>` if an error occurs.
+    /// a `Result` with a `ChatResponse` on success or a `Box<dyn Error>` on failure.
     pub async fn create_chat_completions(
         self,
         parameters: ChatParameters,
@@ -216,4 +214,24 @@ impl OpenAI {
 
         Ok(serde_json::from_slice::<EditResponse>(&result).expect("Failed to parse edit response"))
     }
+
+
+    pub async fn create_image(self, parameters: ImageParameters) -> Result<ImageResponse, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/images");
+
+        let result = client
+            .post(url)
+            .insert_header(("Content-Type", "application/json"))
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<ImageResponse>(&result).expect("Failed to parse image response"))
+    }
+
 }
