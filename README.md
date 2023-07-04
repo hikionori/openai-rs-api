@@ -12,9 +12,9 @@ Unofficial api client for OpenAI
 4. Edits
    - [x] Create edit
 5. Images
-   - [ ] Create image
-   - [ ] Create image edit
-   - [ ] Create image variation
+   - [x] Create image
+   - [x] Create image edit
+   - [x] Create image variation
 6. Embeddings
    - [ ] Create embedding
 7. Audio

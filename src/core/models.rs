@@ -365,12 +365,71 @@ pub mod images {
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize, Deserialize)]
-    pub struct ImageParameters {
+    pub struct ImageCreateParameters {
         prompt: String,
-        num_images: i32,
-        image_size: String,
+        /// The number of images to generate. Must be between 1 and 10.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        #[serde(rename = "n")]
+        num_images: Option<i32>,
+        /// The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        #[serde(rename = "size")]
+        image_size: Option<String>,
+        /// The format in which the generated images are returned. Must be one of `url` or `b64_json`.
         #[serde(skip_serializing_if = "Option::is_none")]
         response_format: Option<String>, // url of b64_json
+        /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
+        /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+        #[serde(skip_serializing_if = "Option::is_none")]
+        user: Option<String>,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct ImageEditParameters {
+        /// The image to edit. Must be a valid PNG file, less than 4MB, and square.
+        /// If mask is not provided, image must have transparency, which will be used as the mask.
+        image: String,
+        /// An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where `image` should be edited.
+        /// Must be a valid PNG file, less than 4MB, and have the same dimensions as `image`.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        mask: Option<String>,
+        /// A text description of the desired image(s). The maximum length is 1000 characters.
+        prompt: String,
+        /// The number of images to generate. Must be between 1 and 10.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        #[serde(rename = "n")]
+        num_images: Option<i32>,
+        /// The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        #[serde(rename = "size")]
+        image_size: Option<String>,
+        /// The format in which the generated images are returned. Must be one of `url` or `b64_json`.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        response_format: Option<String>, // url of b64_json
+        /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
+        /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+        #[serde(skip_serializing_if = "Option::is_none")]
+        user: Option<String>,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct ImageVariationParameters {
+        /// The image to edit. Must be a valid PNG file, less than 4MB, and square.
+        /// If mask is not provided, image must have transparency, which will be used as the mask.
+        image: String,
+        /// The number of images to generate. Must be between 1 and 10.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        #[serde(rename = "n")]
+        num_images: Option<i32>,
+        /// The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        #[serde(rename = "size")]
+        image_size: Option<String>,
+        /// The format in which the generated images are returned. Must be one of `url` or `b64_json`.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        response_format: Option<String>, // url of b64_json
+        /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
+        /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
         user: Option<String>,
     }
@@ -384,5 +443,45 @@ pub mod images {
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageData {
         url: String,
+    }
+}
+
+pub mod embeddings {
+    use serde::{Deserialize, Serialize};
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct EmbeddingParameters {
+        /// ID of the model to use. You can use the List models API to see all of your available models,
+        /// or see our Model overview for descriptions of them.
+        model: String,
+        ///nput text to embed, encoded as a string or array of tokens. To embed multiple
+        /// inputs in a single request, pass an array of strings or array of token arrays.
+        /// Each input must not exceed the max input tokens for the model (8191 tokens for text-embedding-ada-002).
+        input: String,
+        /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
+        /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+        #[serde(skip_serializing_if = "Option::is_none")]
+        user: Option<String>,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct EmbeddingResponse {
+        object: String,
+        data: Vec<EmbeddingData>,
+        model: String,
+        usage: Usage,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct EmbeddingData {
+        object: String,
+        embedding: Vec<f32>,
+        index: i32,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct Usage {
+        prompt_tokens: i32,
+        total_tokens: i32,
     }
 }

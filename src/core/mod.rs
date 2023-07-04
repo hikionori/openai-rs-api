@@ -11,7 +11,7 @@ use self::models::{
     completions::{CompletionParameters, CompletionResponse},
     edits::{EditParameters, EditResponse},
     list_models::{Model, ModelList},
-    images::{ImageParameters, ImageResponse},
+    images::{ImageCreateParameters, ImageResponse, ImageEditParameters, ImageVariationParameters},
 };
 
 pub struct OpenAI {
@@ -216,9 +216,45 @@ impl OpenAI {
     }
 
 
-    pub async fn create_image(self, parameters: ImageParameters) -> Result<ImageResponse, Box<dyn Error>> {
+    pub async fn create_image(self, parameters: ImageCreateParameters) -> Result<ImageResponse, Box<dyn Error>> {
         let client = self.https_client;
-        let url = String::from("https://api.openai.com/v1/images");
+        let url = String::from("https://api.openai.com/v1/images/generations");
+
+        let result = client
+            .post(url)
+            .insert_header(("Content-Type", "application/json"))
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<ImageResponse>(&result).expect("Failed to parse image response"))
+    }
+
+    pub async fn create_image_edit(self, parameters: ImageEditParameters) -> Result<ImageResponse, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/images/edits");
+
+        let result = client
+            .post(url)
+            .insert_header(("Content-Type", "application/json"))
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<ImageResponse>(&result).expect("Failed to parse image response"))
+    }
+
+    pub async fn create_image_variations(self, parameters: ImageVariationParameters) -> Result<ImageResponse, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/images/variations");
 
         let result = client
             .post(url)
