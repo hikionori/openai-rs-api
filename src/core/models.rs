@@ -5,36 +5,58 @@ pub mod list_models {
 
     #[derive(Debug, Deserialize)]
     pub struct ModelPermission {
+        /// The ID of the permission.
         id: String,
+        /// The type of object returned by the API. In this case, it will always be "model_permission".
         object: String,
+        /// The Unix timestamp (in seconds) when the permission was created.
         created: i64,
+        /// Whether the permission allows creating engines.
         allow_create_engine: bool,
+        /// Whether the permission allows sampling.
         allow_sampling: bool,
+        /// Whether the permission allows log probabilities.
         allow_logprobs: bool,
+        /// Whether the permission allows search indices.
         allow_search_indices: bool,
+        /// Whether the permission allows viewing.
         allow_view: bool,
+        /// Whether the permission allows fine-tuning.
         allow_fine_tuning: bool,
+        /// The ID of the organization that the permission belongs to.
         organization: String,
+        /// The ID of the group that the permission belongs to.
         group: Option<String>,
+        /// Whether the permission is blocking.
         is_blocking: bool,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct Model {
+        /// The ID of the model.
         id: String,
+        /// The type of object returned by the API. In this case, it will always be "model".
         object: String,
+        /// The Unix timestamp (in seconds) when the model was created.
         created: i64,
+        /// The ID of the organization that owns the model.
         owned_by: String,
+        /// A list of `ModelPermission` objects representing the permissions for the model.
         permission: Vec<ModelPermission>,
+        /// The ID of the root model that this model was created from.
         root: String,
+        /// The ID of the parent model that this model was created from.
         parent: Option<String>,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct ModelList {
+        /// The type of object returned by the API. In this case, it will always be "list".
         object: String,
+        /// A vector of `Model` objects representing the models returned by the API.
         data: Vec<Model>,
     }
+
 }
 
 pub mod edits {
@@ -65,22 +87,31 @@ pub mod edits {
 
     #[derive(Debug, Deserialize)]
     pub struct EditResponse {
+        /// The type of object returned by the API. In this case, it will always be "text_completion".
         object: String,
+        /// The Unix timestamp (in seconds) when the completion was generated.
         created: i64,
+        /// A list of `Choice` objects representing the generated completions.
         choices: Vec<Choice>,
+        /// An object containing information about the number of tokens used in the prompt and generated completion.
         usage: Usage,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct Choice {
+        /// The generated text for this choice.
         text: String,
+        /// The index of this choice in the list of choices returned by the API.
         index: i32,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct Usage {
+        /// The number of tokens in the prompt.
         prompt_tokens: i32,
+        /// The number of tokens in the generated completion.
         completion_tokens: i32,
+        /// The total number of tokens used (prompt + completion).
         total_tokens: i32,
     }
 }
@@ -204,26 +235,41 @@ pub mod completions {
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct CompletionResponse {
+        /// The unique identifier for the completion request.
         id: String,
+        /// The type of object, which is always "text_completion".
         object: String,
+        /// The Unix timestamp (in seconds) when the completion request was created.
         created: i64,
+        /// The ID of the model used to generate the completion.
         model: String,
+        /// A vector of `CompletionChoice` objects, each representing a possible completion.
         choices: Vec<CompletionChoice>,
+        /// An object containing usage statistics for the completion request.
         usage: Usage,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct CompletionChoice {
+        /// The generated text for this completion choice.
         text: String,
+        /// The index of this completion choice in the list of all possible choices.
         index: i32,
+        /// The log probabilities of the tokens in the generated text.
+        /// If the `logprobs` parameter was not set in the request, this field will be `None`.
         logprobs: Option<i32>,
+        /// The reason why the completion was finished.
+        /// Possible values are "stop", "length", "temperature", "top_p", "nucleus_sampling", and "incomplete".
         finish_reason: String,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Usage {
+        /// prompt_tokens: an integer representing the number of tokens in the prompt used for the completion request.
         prompt_tokens: i32,
+        /// completion_tokens: an integer representing the number of tokens in the generated completion text.
         completion_tokens: i32,
+        /// total_tokens: an integer representing the total number of tokens used in the completion request, including both the prompt and the generated completion text.
         total_tokens: i32,
     }
 }
@@ -236,57 +282,57 @@ pub mod chat {
         /// ID of the model to use. See the
         /// [model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility) table
         /// for details on which models work with the Chat API.
-        model: String,
+        pub model: String,
         /// A list of messages comprising the conversation so far.
-        messages: Vec<Message>,
+        pub messages: Vec<Message>,
         /// A list of functions the model may generate JSON inputs for.
         #[serde(skip_serializing_if = "Option::is_none")]
-        functions: Option<Vec<Function>>,
+        pub functions: Option<Vec<Function>>,
         /// Controls how the model responds to function calls. "none" means the model does not call a function,
         /// and responds to the end-user. "auto" means the model can pick between an end-user or calling a
         /// function. Specifying a particular function via `{"name":\ "my_function"}` forces the model to call
         /// that function. "none" is the default when no functions are present. "auto" is the default if functions
         /// are present.
         #[serde(skip_serializing_if = "Option::is_none")]
-        function_call: Option<serde_json::Value>,
+        pub function_call: Option<serde_json::Value>,
         /// What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output
         /// more random, while lower values like 0.2 will make it more focused and deterministic.
         ///
         /// We generally recommend altering this or `top_p` but not both.
         #[serde(skip_serializing_if = "Option::is_none")]
-        temperature: Option<f32>,
+        pub temperature: Option<f32>,
         /// An alternative to sampling with temperature, called nucleus sampling, where the
         /// model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
         ///
         /// We generally recommend altering this or `temperature` but not both.
         #[serde(skip_serializing_if = "Option::is_none")]
-        top_p: Option<f32>,
+        pub top_p: Option<f32>,
         /// How many chat completion choices to generate for each input message.
         #[serde(skip_serializing_if = "Option::is_none")]
-        n: Option<i32>,
+        pub n: Option<i32>,
         /// If set, partial message deltas will be sent, like in ChatGPT.
         /// Tokens will be sent as data-only server-sent events as they become available,
         /// with the stream terminated by a `data: [DONE]` message. Example Python code.
         #[serde(skip_serializing_if = "Option::is_none")]
-        stream: Option<bool>,
+        pub stream: Option<bool>,
         /// Up to 4 sequences where the API will stop generating further tokens.
         #[serde(skip_serializing_if = "Option::is_none")]
-        stop: Option<Vec<String>>,
+        pub stop: Option<Vec<String>>,
         /// The maximum number of tokens to generate in the chat completion.
         #[serde(skip_serializing_if = "Option::is_none")]
-        max_tokens: Option<i32>,
+        pub max_tokens: Option<i32>,
         /// Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the
         /// text so far, increasing the model's likelihood to talk about new topics.
         ///
         /// [See more information about frequency and presence penalties.](https://platform.openai.com/docs/api-reference/parameter-details)
         #[serde(skip_serializing_if = "Option::is_none")]
-        presence_penalty: Option<f32>,
+        pub presence_penalty: Option<f32>,
         /// Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in
         /// the text so far, decreasing the model's likelihood to repeat the same line verbatim.
         ///
         /// [See more information about frequency and presence penalties.](https://platform.openai.com/docs/api-reference/parameter-details)
         #[serde(skip_serializing_if = "Option::is_none")]
-        frequency_penalty: Option<f32>,
+        pub frequency_penalty: Option<f32>,
         /// Modify the likelihood of specified tokens appearing in the completion.
         ///
         /// Accepts a json object that maps tokens (specified by their token ID in the tokenizer) to an associated bias value from -100 to 100.
@@ -294,10 +340,10 @@ pub mod chat {
         /// but values between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100 should result in a ban or
         /// exclusive selection of the relevant token.
         #[serde(skip_serializing_if = "Option::is_none")]
-        logit_bias: Option<serde_json::Value>,
+        pub logit_bias: Option<serde_json::Value>,
         ///A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
-        user: Option<String>,
+        pub user: Option<String>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -319,17 +365,25 @@ pub mod chat {
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ChatResponse {
-        id: String,
-        object: String,
-        created: i64,
-        choices: Vec<CompletionChoice>,
-        usage: Usage,
+        /// The unique identifier for this chat response.
+        pub id: String,
+        /// The type of object, which is always "text_completion".
+        pub object: String,
+        /// The Unix timestamp (in seconds) when this chat response was created.
+        pub created: i64,
+        /// A vector of `CompletionChoice` structs, representing the different choices for the chat response.
+        pub choices: Vec<CompletionChoice>,
+        /// An object containing usage information for this API request.
+        pub usage: Usage,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct CompletionChoice {
+        /// The index of this choice in the list of choices returned by the API.
         index: i32,
+        /// The message generated by the API for this choice.
         message: Message,
+        /// The reason why the API stopped generating further tokens for this choice.
         finish_reason: String,
     }
 
@@ -436,14 +490,18 @@ pub mod images {
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageResponse {
+        /// The timestamp (in seconds since the Unix epoch) when the request was made.
         created: usize,
+        /// A vector of ImageData structs containing the URLs of the generated images.
         data: Vec<ImageData>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageData {
+        /// The URL of the generated image.
         url: String,
     }
+
 }
 
 pub mod embeddings {
@@ -453,88 +511,97 @@ pub mod embeddings {
     pub struct EmbeddingParameters {
         /// ID of the model to use. You can use the List models API to see all of your available models,
         /// or see our Model overview for descriptions of them.
-        model: String,
+        pub model: String,
         ///nput text to embed, encoded as a string or array of tokens. To embed multiple
         /// inputs in a single request, pass an array of strings or array of token arrays.
         /// Each input must not exceed the max input tokens for the model (8191 tokens for text-embedding-ada-002).
-        input: String,
+        pub input: String,
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.
         /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
-        user: Option<String>,
+        pub user: Option<String>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct EmbeddingResponse {
-        object: String,
-        data: Vec<EmbeddingData>,
-        model: String,
-        usage: Usage,
+        /// A string representing the type of object returned. In this case, it should always be "embedding".
+        pub object: String,
+        /// A vector of `EmbeddingData` representing the embedding of the input text.
+        pub data: Vec<EmbeddingData>,
+        /// ID of the model used for the embedding.
+        pub model: String,
+        /// An object containing information about the API usage for the request.
+        pub usage: Usage,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct EmbeddingData {
-        object: String,
-        embedding: Vec<f32>,
-        index: i32,
+        /// object: A string representing the type of object returned. In this case, it should always be "embedding".
+        pub object: String,
+        /// embedding: A vector of 32-bit floating point numbers representing the embedding of the input text. The length of the vector depends on the model used for the embedding.
+        pub embedding: Vec<f32>,
+        /// index: An integer representing the index of the input text in the request. This is useful when multiple inputs are passed in a single request.
+        pub index: i32,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Usage {
-        prompt_tokens: i32,
-        total_tokens: i32,
+        /// prompt_tokens: An integer representing the number of tokens used in the prompt for the API request.
+        pub prompt_tokens: i32,
+        /// total_tokens: An integer representing the total number of tokens used in the API request, including the prompt tokens.
+        pub total_tokens: i32,
     }
 }
-
 pub mod audio {
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize)]
     pub struct TranscriptionParameters {
         /// The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
-        file: String,
+        pub file: String,
         /// ID of the model to use. Only `whisper-1` is currently available.
-        model: String,
+        pub model: String,
         /// An optional text to guide the model's style or continue a previous audio segment. The prompt should match the audio language.
         #[serde(skip_serializing_if = "Option::is_none")]
-        prompt: Option<String>,
+        pub prompt: Option<String>,
         /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
         #[serde(skip_serializing_if = "Option::is_none")]
-        respone_format: Option<String>,
+        pub respone_format: Option<String>,
         /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2
         /// will make it more focused and deterministic. If set to 0, the model will use log probability to automatically increase the temperature
         /// until certain thresholds are hit.
         #[serde(skip_serializing_if = "Option::is_none")]
-        temperature: Option<f32>,
+        pub temperature: Option<f32>,
         /// The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
         #[serde(skip_serializing_if = "Option::is_none")]
-        language: Option<String>,
+        pub language: Option<String>,
     }
 
     #[derive(Debug, Serialize)]
     pub struct TranslationParameters {
         /// The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
-        file: String,
+        pub file: String,
         /// ID of the model to use. Only `whisper-1` is currently available.
-        model: String,
+        pub model: String,
         /// An optional text to guide the model's style or continue a previous audio segment. The prompt should match the audio language.
         #[serde(skip_serializing_if = "Option::is_none")]
-        prompt: Option<String>,
+        pub prompt: Option<String>,
         /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
         /// The default is json.
         #[serde(skip_serializing_if = "Option::is_none")]
-        respone_format: Option<String>,
+        pub respone_format: Option<String>,
         /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2
         /// will make it more focused and deterministic. If set to 0, the model will use log probability to automatically increase the temperature
         /// until certain thresholds are hit.
         /// The default is 1.
         #[serde(skip_serializing_if = "Option::is_none")]
-        temperature: Option<f32>,
+        pub temperature: Option<f32>,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct TextResponse {
-        text: String,
+        /// The generated text from the OpenAI API.
+        pub text: String,
     }
 }
 
@@ -543,18 +610,26 @@ pub mod files {
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct FileList {
-        data: Vec<FileData>,
-        object: String,
+        /// A vector of `FileData` objects representing the files returned by the API.
+        pub data: Vec<FileData>,
+        /// A string representing the object type returned by the API. This should always be "list".
+        pub object: String,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct FileData {
-        id: String,
-        object: String,
-        bytes: u32,
-        created_at: u64,
-        filename: String,
-        purpose: String,
+        /// The unique identifier for the file.
+        pub id: String,
+        /// The type of object, which should always be "file".
+        pub object: String,
+        /// The size of the file in bytes.
+        pub bytes: u32,
+        /// The Unix timestamp (in seconds) when the file was created.
+        pub created_at: u64,
+        /// The name of the file.
+        pub filename: String,
+        /// The intended purpose of the file.
+        pub purpose: String,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -563,21 +638,175 @@ pub mod files {
         ///
         /// If the purpose is set to "fine-tune", each line is a JSON record with "prompt" and "completion"
         /// fields representing your [training examples.](https://platform.openai.com/docs/guides/fine-tuning/prepare-training-data)
-        file: String,
+        pub file: String,
         /// The intended purpose of the uploaded documents.
         ///
         /// Use "fine-tune" for Fine-tuning. This allows us to validate the format of the uploaded file.
-        purpose: String,
+        pub purpose: String,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct DeleteResponse {
-        id: String,
-        object: String,
-        deleted: bool,
+        /// The unique identifier for the deleted object.
+        pub id: String,
+        /// The type of object that was deleted.
+        pub object: String,
+        /// A boolean indicating whether the object was successfully deleted.
+        pub deleted: bool,
     }
 }
 
-pub mod fine_tunes {}
+pub mod fine_tunes {
+    use serde::{Deserialize, Serialize};
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct CreateFineTuneParameters {
+        /// The ID of an uploaded file that contains training data.
+        pub training_file: String,
+        /// The ID of an uploaded file that contains validation data.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub validation_file: Option<String>,
+        /// The name of the base model to use for fine-tuning.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub model: Option<String>,
+        /// The number of epochs to train the model for.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub epochs: Option<u32>,
+        /// The batch size to use for training.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub batch_size: Option<u32>,
+        /// The learning rate multiplier to use for training.
+        /// The fine-tuning learning rate is the original learning rate used for pretraining multiplied by this value.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub learning_rate_multiplier: Option<f32>,
+        /// The weight to use for loss on the prompt tokens. This controls how much the model tries
+        /// to learn to generate the prompt (as compared to the completion which always has a weight of 1.0),
+        /// and can add a stabilizing effect to training when completions are short.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub prompt_loss_weight: Option<f32>,
+        /// If set, we calculate classification-specific metrics such as accuracy and F-1 score using
+        /// the validation set at the end of every epoch. These metrics can be viewed in the results file.
+        ///
+        /// In order to compute classification metrics, you must provide a `validation_file`.
+        /// Additionally, you must specify `classification_n_classes` for multiclass classification or
+        /// `classification_positive_class` for binary classification.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub compute_classification_metrics: Option<bool>,
+        /// The number of classes in a classification task.
+        ///
+        /// This parameter is required for multiclass classification.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub classification_n_classes: Option<u32>,
+        /// The positive class in binary classification.
+        ///
+        /// This parameter is needed to generate precision, recall,
+        /// and F1 metrics when doing binary classification.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub classification_positive_class: Option<String>,
+        /// If this is provided, we calculate F-beta scores at the specified beta values.
+        /// The F-beta score is a generalization of F-1 score. This is only used for binary classification.
+        ///
+        /// With a beta of 1 (i.e. the F-1 score), precision and recall are given the same weight.
+        /// A larger beta score puts more weight on recall and less on precision. A smaller beta score puts
+        /// more weight on precision and less on recall.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub classification_beta: Option<f32>,
+        ///A string of up to 40 characters that will be added to your fine-tuned model name.
+        ///
+        /// For example, a suffix of "custom-model-name" would produce a model name like ada:ft-your-org:custom-model-name-2022-02-15-04-21-04.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub suffix: Option<String>,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FineTuneList {
+        /// The object type, which is always "list".
+        pub object: String,
+        /// A vector of `FineTuneData` structs representing the fine-tuned models.
+        pub data: Vec<FineTuneData>,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FineTuneData {
+        /// The ID of the fine-tuned model.
+        pub id: String,
+        /// The object type, which is always "fine_tune".
+        pub object: String,
+        /// The name of the base model that was fine-tuned.
+        pub model: String,
+        /// The Unix timestamp (in seconds) when the fine-tuned model was created.
+        pub created_at: i64,
+        /// The ID of the fine-tuned model that was created.
+        pub fine_tuned_model: Option<String>,
+        /// The hyperparameters used for fine-tuning the model.
+        pub hyperparams: FineTuneHyperparams,
+        /// The ID of the organization that created the fine-tuned model.
+        pub organization_id: String,
+        /// A vector of URLs pointing to the result files generated during fine-tuning.
+        pub result_files: Vec<String>,
+        /// The status of the fine-tuned model.
+        pub status: String,
+        /// A vector of `FineTuneFiles` structs representing the validation files used during fine-tuning.
+        pub validation_files: Vec<FineTuneFiles>,
+        /// A vector of `FineTuneFiles` structs representing the training files used during fine-tuning.
+        pub training_files: Vec<FineTuneFiles>,
+        /// The Unix timestamp (in seconds) when the fine-tuned model was last updated.
+        pub updated_at: i64,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    /// A struct representing the hyperparameters used for fine-tuning a model.
+    pub struct FineTuneHyperparams {
+        /// The batch size used during fine-tuning.
+        pub batch_size: u32,
+        /// The number of epochs used during fine-tuning.
+        pub epochs: u32,
+        /// A multiplier applied to the learning rate during fine-tuning.
+        pub learning_rate_multiplier: f32,
+        /// The weight given to the prompt loss during fine-tuning.
+        pub prompt_loss_weight: f32,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    /// A struct representing a file used during fine-tuning a model.
+    pub struct FineTuneFiles {
+        /// The ID of the file.
+        pub id: String,
+        /// The object type, which is always "file".
+        pub object: String,
+        /// The size of the file in bytes.
+        pub bytes: u32,
+        /// The Unix timestamp (in seconds) when the file was created.
+        pub created_at: i64,
+        /// The name of the file.
+        pub filename: String,
+        /// The purpose of the file, which can be "training" or "validation".
+        pub purpose: String,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FineTuneEventList {
+        /// The object type, which is always "list".
+        pub object: String,
+        /// A vector of `FineTuneEvent` structs representing the fine-tuned events.
+        pub data: Vec<FineTuneEvent>,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    /// A struct representing a fine-tuned event.
+    pub struct FineTuneEvent {
+        /// The object type, which is always "fine_tune_event".
+        pub object: String,
+        /// The Unix timestamp (in seconds) when the fine-tuned event was created.
+        pub created_at: i64,
+        /// The level of the fine-tuned event, which can be "info", "warning", or "error".
+        pub level: String,
+        /// The message associated with the fine-tuned event.
+        pub message: String,
+    }
+}
 
 pub mod moderations {}
+
+// Document every field in this struct
+// 
