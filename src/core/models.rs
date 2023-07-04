@@ -844,4 +844,87 @@ pub mod fine_tunes {
     }
 }
 
-pub mod moderations {}
+pub mod moderations {
+    use serde::{Deserialize, Serialize};
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct TextModerationParameters {
+        /// The ID of the model to use for moderation.
+        #[serde(skip_serializing_if = "Option::is_none")]
+        pub model: Option<String>,
+        /// The text to moderate.
+        pub input: String
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct TextModerationResult {
+        /// The ID of the moderation result.
+        pub id: String,
+        /// The name of the model used for moderation.
+        pub model: String,
+        /// The moderation results.
+        pub results: Vec<TextModerationCategory>,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct TextModerationCategory {
+        /// Whether the text was flagged for this category.
+        pub flagged: bool,
+        /// The categories and their corresponding boolean values.
+        pub categories: TextModerationCategoryValues,
+        /// The scores for each category.
+        pub category_scores: TextModerationCategoryScores,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct TextModerationCategoryValues {
+        /// Whether the text was flagged for sexual content.
+        pub sexual: bool,
+        /// Whether the text was flagged for hate speech.
+        pub hate: bool,
+        /// Whether the text was flagged for harassment.
+        pub harassment: bool,
+        /// Whether the text was flagged for self-harm.
+        pub self_harm: bool,
+        /// Whether the text was flagged for sexual content involving minors.
+        pub sexual_minors: bool,
+        /// Whether the text was flagged for hate speech with threatening language.
+        pub hate_threatening: bool,
+        /// Whether the text was flagged for graphic violence.
+        pub violence_graphic: bool,
+        /// Whether the text was flagged for self-harm with intent.
+        pub self_harm_intent: bool,
+        /// Whether the text was flagged for self-harm instructions.
+        pub self_harm_instructions: bool,
+        /// Whether the text was flagged for harassment with threatening language.
+        pub harassment_threatening: bool,
+        /// Whether the text was flagged for violence.
+        pub violence: bool,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct TextModerationCategoryScores {
+        /// The score for sexual content.
+        pub sexual: f64,
+        /// The score for hate speech.
+        pub hate: f64,
+        /// The score for harassment.
+        pub harassment: f64,
+        /// The score for self-harm.
+        pub self_harm: f64,
+        /// The score for sexual content involving minors.
+        pub sexual_minors: f64,
+        /// The score for hate speech with threatening language.
+        pub hate_threatening: f64,
+        /// The score for graphic violence.
+        pub violence_graphic: f64,
+        /// The score for self-harm with intent.
+        pub self_harm_intent: f64,
+        /// The score for self-harm instructions.
+        pub self_harm_instructions: f64,
+        /// The score for harassment with threatening language.
+        pub harassment_threatening: f64,
+        /// The score for violence.
+        pub violence: f64,
+    }
+}
