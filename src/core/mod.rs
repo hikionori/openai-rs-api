@@ -572,6 +572,18 @@ impl OpenAI {
         Ok(String::from_utf8(result.to_vec()).expect("Failed to parse file content"))
     }
 
+    /// The function `create_fine_tune` sends a POST request to the OpenAI API to create a fine-tuned
+    /// model and returns the retrieved data.
+    /// 
+    /// Arguments:
+    /// 
+    /// * `parameters`: The `parameters` parameter in the `create_fine_tune` function is of type
+    /// `CreateFineTuneParameters`. It is an input parameter that contains the data required to create a
+    /// fine-tune task. The specific structure and fields of the `CreateFineTuneParameters` type are not
+    /// 
+    /// Returns:
+    /// 
+    /// a Result object with the type FineTuneRetriveData.
     pub async fn create_fine_tune(
         self,
         parameters: CreateFineTuneParameters,
@@ -593,6 +605,12 @@ impl OpenAI {
             .expect("Failed to parse fine tune data"))
     }
 
+    /// The function `list_fine_tunes` makes an HTTP GET request to the OpenAI API to retrieve a list of
+    /// fine-tuned models.
+    /// 
+    /// Returns:
+    /// 
+    /// a Result object with the type FineTuneList.
     pub async fn list_fine_tunes(self) -> Result<FineTuneList, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/fine-tunes");
@@ -613,6 +631,17 @@ impl OpenAI {
         )
     }
 
+    /// The function retrieves fine-tune data from the OpenAI API using the provided fine-tune ID.
+    /// 
+    /// Arguments:
+    /// 
+    /// * `fine_tune_id`: The `fine_tune_id` parameter is a unique identifier for a specific fine-tuning
+    /// job. It is used to retrieve the data associated with that fine-tuning job from the OpenAI API.
+    /// 
+    /// Returns:
+    /// 
+    /// a `Result` type with the success variant containing a `FineTuneRetriveData` object and the error
+    /// variant containing a `Box<dyn Error>` object.
     pub async fn retrive_fine_tune(
         self,
         fine_tune_id: String,
@@ -634,6 +663,17 @@ impl OpenAI {
             .expect("Failed to parse fine tune data"))
     }
 
+    /// The `cancel_fine_tune` function cancels a fine-tuning process by sending a POST request to the
+    /// OpenAI API.
+    /// 
+    /// Arguments:
+    /// 
+    /// * `fine_tune_id`: The `fine_tune_id` parameter is a unique identifier for a fine-tuning process.
+    /// It is used to specify which fine-tuning process you want to cancel.
+    /// 
+    /// Returns:
+    /// 
+    /// a Result object with the type FineTuneRetriveData.
     pub async fn cancel_fine_tune(
         self,
         fine_tune_id: String,
@@ -658,6 +698,18 @@ impl OpenAI {
             .expect("Failed to parse fine tune data"))
     }
 
+    /// The function `list_fine_tune_events` is an asynchronous function in Rust that retrieves a list
+    /// of fine-tune events from the OpenAI API.
+    /// 
+    /// Arguments:
+    /// 
+    /// * `fine_tune_id`: The `fine_tune_id` parameter is a unique identifier for a fine-tuning job. It
+    /// is used to specify which fine-tuning job's events you want to retrieve.
+    /// 
+    /// Returns:
+    /// 
+    /// a `Result` type with the `Ok` variant containing a `FineTuneEventList` object and the `Err`
+    /// variant containing a `Box<dyn Error>` object.
     pub async fn list_fine_tune_events(
         self,
         fine_tune_id: String,
@@ -682,6 +734,18 @@ impl OpenAI {
             .expect("Failed to parse fine tune event list"))
     }
 
+    /// The function `delete_fine_tune` sends a DELETE request to the OpenAI API to delete a fine-tuned
+    /// model and returns the result as a `FineTuneDelete` object.
+    /// 
+    /// Arguments:
+    /// 
+    /// * `model`: The `model` parameter is a string that represents the name or ID of the fine-tuned
+    /// model that you want to delete.
+    /// 
+    /// Returns:
+    /// 
+    /// a `Result` enum with the success variant containing a `FineTuneDelete` object or the error
+    /// variant containing a `Box<dyn Error>` object.
     pub async fn delete_fine_tune(self, model: String) -> Result<FineTuneDelete, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/models/{}", model);
