@@ -10,6 +10,7 @@ use self::models::{
     chat::{ChatParameters, ChatResponse},
     completions::{CompletionParameters, CompletionResponse},
     edits::{EditParameters, EditResponse},
+    embeddings::{EmbeddingParameters, EmbeddingResponse},
     images::{ImageCreateParameters, ImageEditParameters, ImageResponse, ImageVariationParameters},
     list_models::{Model, ModelList},
 };
@@ -316,5 +317,27 @@ impl OpenAI {
 
         Ok(serde_json::from_slice::<ImageResponse>(&result)
             .expect("Failed to parse image response"))
+    }
+
+    pub async fn create_embedding(
+        self,
+        parameters: EmbeddingParameters,
+    ) -> Result<EmbeddingResponse, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/embeddings");
+
+        let result = client
+            .post(url)
+            .insert_header(("Content-Type", "application/json"))
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<EmbeddingResponse>(&result)
+            .expect("Failed to parse embedding response"))
     }
 }

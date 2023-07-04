@@ -16,7 +16,7 @@ Unofficial api client for OpenAI
    - [x] Create image edit
    - [x] Create image variation
 6. Embeddings
-   - [ ] Create embedding
+   - [x] Create embedding
 7. Audio
    - [ ] Create transcription
    - [ ] Create translation
