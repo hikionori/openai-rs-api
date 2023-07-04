@@ -13,6 +13,10 @@ use self::models::{
     edits::{EditParameters, EditResponse},
     embeddings::{EmbeddingParameters, EmbeddingResponse},
     files::{DeleteResponse, FileData, FileList, FileUpload},
+    fine_tunes::{
+        CreateFineTuneParameters, FineTuneDelete, FineTuneEventList, FineTuneList,
+        FineTuneRetriveData,
+    },
     images::{ImageCreateParameters, ImageEditParameters, ImageResponse, ImageVariationParameters},
     list_models::{Model, ModelList},
 };
@@ -566,5 +570,133 @@ impl OpenAI {
             .unwrap();
 
         Ok(String::from_utf8(result.to_vec()).expect("Failed to parse file content"))
+    }
+
+    pub async fn create_fine_tune(
+        self,
+        parameters: CreateFineTuneParameters,
+    ) -> Result<FineTuneRetriveData, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/fine-tunes");
+
+        let result = client
+            .post(url)
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FineTuneRetriveData>(&result)
+            .expect("Failed to parse fine tune data"))
+    }
+
+    pub async fn list_fine_tunes(self) -> Result<FineTuneList, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/fine-tunes");
+
+        let result = client
+            .get(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(
+            serde_json::from_slice::<FineTuneList>(&result)
+                .expect("Failed to parse fine tune list"),
+        )
+    }
+
+    pub async fn retrive_fine_tune(
+        self,
+        fine_tune_id: String,
+    ) -> Result<FineTuneRetriveData, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = format!("https://api.openai.com/v1/fine-tunes/{}", fine_tune_id);
+
+        let result = client
+            .get(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FineTuneRetriveData>(&result)
+            .expect("Failed to parse fine tune data"))
+    }
+
+    pub async fn cancel_fine_tune(
+        self,
+        fine_tune_id: String,
+    ) -> Result<FineTuneRetriveData, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = format!(
+            "https://api.openai.com/v1/fine-tunes/{}/cancel",
+            fine_tune_id
+        );
+
+        let result = client
+            .post(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FineTuneRetriveData>(&result)
+            .expect("Failed to parse fine tune data"))
+    }
+
+    pub async fn list_fine_tune_events(
+        self,
+        fine_tune_id: String,
+    ) -> Result<FineTuneEventList, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = format!(
+            "https://api.openai.com/v1/fine-tunes/{}/events",
+            fine_tune_id
+        );
+
+        let result = client
+            .get(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FineTuneEventList>(&result)
+            .expect("Failed to parse fine tune event list"))
+    }
+
+    pub async fn delete_fine_tune(self, model: String) -> Result<FineTuneDelete, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = format!("https://api.openai.com/v1/models/{}", model);
+
+        let result = client
+            .delete(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FineTuneDelete>(&result)
+            .expect("Failed to parse fine tune delete"))
     }
 }

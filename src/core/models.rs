@@ -56,7 +56,6 @@ pub mod list_models {
         /// A vector of `Model` objects representing the models returned by the API.
         pub data: Vec<Model>,
     }
-
 }
 
 pub mod edits {
@@ -501,7 +500,6 @@ pub mod images {
         /// The URL of the generated image.
         pub url: String,
     }
-
 }
 
 pub mod embeddings {
@@ -723,11 +721,41 @@ pub mod fine_tunes {
         /// The object type, which is always "list".
         pub object: String,
         /// A vector of `FineTuneData` structs representing the fine-tuned models.
-        pub data: Vec<FineTuneData>,
+        pub data: Vec<FineTuneListData>,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
-    pub struct FineTuneData {
+    pub struct FineTuneRetriveData {
+        /// The ID of the fine-tuned model.
+        pub id: String,
+        /// The object type, which is always "fine_tune".
+        pub object: String,
+        /// The name of the base model that was fine-tuned.
+        pub model: String,
+        /// The Unix timestamp (in seconds) when the fine-tuned model was created.
+        pub created_at: i64,
+        /// The vector of `FineTuneEvent` structs representing the events that occurred during fine-tuning.
+        pub events: Vec<FineTuneEvent>,
+        /// The ID of the fine-tuned model that was created.
+        pub fine_tuned_model: Option<String>,
+        /// The hyperparameters used for fine-tuning the model.
+        pub hyperparams: FineTuneHyperparams,
+        /// The ID of the organization that created the fine-tuned model.
+        pub organization_id: String,
+        /// A vector of URLs pointing to the result files generated during fine-tuning.
+        pub result_files: Vec<String>,
+        /// The status of the fine-tuned model.
+        pub status: String,
+        /// A vector of `FineTuneFiles` structs representing the validation files used during fine-tuning.
+        pub validation_files: Vec<FineTuneFiles>,
+        /// A vector of `FineTuneFiles` structs representing the training files used during fine-tuning.
+        pub training_files: Vec<FineTuneFiles>,
+        /// The Unix timestamp (in seconds) when the fine-tuned model was last updated.
+        pub updated_at: i64,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FineTuneListData {
         /// The ID of the fine-tuned model.
         pub id: String,
         /// The object type, which is always "fine_tune".
@@ -804,9 +832,16 @@ pub mod fine_tunes {
         /// The message associated with the fine-tuned event.
         pub message: String,
     }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FineTuneDelete {
+        /// The ID of the fine-tuned model that was deleted.
+        pub id: String,
+        /// The object type, which is always "fine_tune".
+        pub object: String,
+        /// A boolean indicating whether the fine-tuned model was successfully deleted.
+        pub deleted: bool,
+    }
 }
 
 pub mod moderations {}
-
-// Document every field in this struct
-// 

@@ -27,11 +27,11 @@ Unofficial api client for OpenAI
    - [x] Retrive file
    - [x] Retrive file content
 9. Fine-tunes
-   - [ ] Create fine-tune
-   - [ ] List fine-tunes
-   - [ ] Retrive fine-tune
-   - [ ] Cancel fine-tune
-   - [ ] List fine-tune events
-   - [ ] Delete fine-tune model
+   - [x] Create fine-tune
+   - [x] List fine-tunes
+   - [x] Retrive fine-tune
+   - [x] Cancel fine-tune
+   - [x] List fine-tune events
+   - [x] Delete fine-tune model
 10. Moderations
 	- [ ] Create moderation
