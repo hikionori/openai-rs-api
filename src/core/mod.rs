@@ -12,6 +12,7 @@ use self::models::{
     completions::{CompletionParameters, CompletionResponse},
     edits::{EditParameters, EditResponse},
     embeddings::{EmbeddingParameters, EmbeddingResponse},
+    files::{DeleteResponse, FileData, FileList, FileUpload},
     images::{ImageCreateParameters, ImageEditParameters, ImageResponse, ImageVariationParameters},
     list_models::{Model, ModelList},
 };
@@ -421,5 +422,91 @@ impl OpenAI {
             .unwrap();
 
         Ok(serde_json::from_slice::<TextResponse>(&result).expect("Failed to parse text response"))
+    }
+
+    pub async fn list_files(self) -> Result<FileList, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/files");
+
+        let result = client
+            .get(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FileList>(&result).expect("Failed to parse file list"))
+    }
+
+    pub async fn upload_files(self, parameters: FileUpload) -> Result<FileData, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = String::from("https://api.openai.com/v1/files");
+
+        let result = client
+            .post(url)
+            .bearer_auth(self.token)
+            .send_json(&parameters)
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FileData>(&result).expect("Failed to parse file data"))
+    }
+
+    pub async fn delete_file(self, file_id: String) -> Result<DeleteResponse, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = format!("https://api.openai.com/v1/files/{}", file_id);
+
+        let result = client
+            .delete(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<DeleteResponse>(&result)
+            .expect("Failed to parse delete response"))
+    }
+
+    pub async fn retrieve_file(self, file_id: String) -> Result<FileData, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = format!("https://api.openai.com/v1/files/{}", file_id);
+
+        let result = client
+            .get(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(serde_json::from_slice::<FileData>(&result).expect("Failed to parse file data"))
+    }
+
+    pub async fn retrieve_file_content(self, file_id: String) -> Result<String, Box<dyn Error>> {
+        let client = self.https_client;
+        let url = format!("https://api.openai.com/v1/files/{}/content", file_id);
+
+        let result = client
+            .get(url)
+            .bearer_auth(self.token)
+            .send()
+            .await
+            .unwrap()
+            .body()
+            .await
+            .unwrap();
+
+        Ok(String::from_utf8(result.to_vec()).expect("Failed to parse file content"))
     }
 }

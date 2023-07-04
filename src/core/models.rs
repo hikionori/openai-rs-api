@@ -501,8 +501,8 @@ pub mod audio {
         /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt.
         #[serde(skip_serializing_if = "Option::is_none")]
         respone_format: Option<String>,
-        /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 
-        /// will make it more focused and deterministic. If set to 0, the model will use log probability to automatically increase the temperature 
+        /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2
+        /// will make it more focused and deterministic. If set to 0, the model will use log probability to automatically increase the temperature
         /// until certain thresholds are hit.
         #[serde(skip_serializing_if = "Option::is_none")]
         temperature: Option<f32>,
@@ -529,17 +529,54 @@ pub mod audio {
         /// until certain thresholds are hit.
         /// The default is 1.
         #[serde(skip_serializing_if = "Option::is_none")]
-        temperature: Option<f32>,        
+        temperature: Option<f32>,
     }
 
     #[derive(Debug, Deserialize)]
     pub struct TextResponse {
         text: String,
     }
-
 }
 
-pub mod files {}
+pub mod files {
+    use serde::{Deserialize, Serialize};
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FileList {
+        data: Vec<FileData>,
+        object: String,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FileData {
+        id: String,
+        object: String,
+        bytes: u32,
+        created_at: u64,
+        filename: String,
+        purpose: String,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct FileUpload {
+        /// Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.
+        ///
+        /// If the purpose is set to "fine-tune", each line is a JSON record with "prompt" and "completion"
+        /// fields representing your [training examples.](https://platform.openai.com/docs/guides/fine-tuning/prepare-training-data)
+        file: String,
+        /// The intended purpose of the uploaded documents.
+        ///
+        /// Use "fine-tune" for Fine-tuning. This allows us to validate the format of the uploaded file.
+        purpose: String,
+    }
+
+    #[derive(Debug, Serialize, Deserialize)]
+    pub struct DeleteResponse {
+        id: String,
+        object: String,
+        deleted: bool,
+    }
+}
 
 pub mod fine_tunes {}
 

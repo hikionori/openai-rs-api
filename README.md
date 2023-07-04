@@ -18,14 +18,14 @@ Unofficial api client for OpenAI
 6. Embeddings
    - [x] Create embedding
 7. Audio
-   - [ ] Create transcription
-   - [ ] Create translation
+   - [x] Create transcription
+   - [x] Create translation
 8. Files
-   - [ ] List files
-   - [ ] Upload file
-   - [ ] Delete file
-   - [ ] Retrive file
-   - [ ] Retrive file content
+   - [x] List files
+   - [x] Upload file
+   - [x] Delete file
+   - [x] Retrive file
+   - [x] Retrive file content
 9. Fine-tunes
    - [ ] Create fine-tune
    - [ ] List fine-tunes
