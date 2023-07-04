@@ -765,6 +765,20 @@ impl OpenAI {
             .expect("Failed to parse fine tune delete"))
     }
 
+    /// The function `create_moderation` sends a POST request to the OpenAI API to create a text
+    /// moderation task and returns the result.
+    /// 
+    /// Arguments:
+    /// 
+    /// * `parameters`: The `parameters` parameter in the `create_moderation` function is of type
+    /// `TextModerationParameters`. It represents the input parameters for the text moderation request.
+    /// The specific structure and fields of the `TextModerationParameters` type are not provided in the
+    /// code snippet, so it would be
+    /// 
+    /// Returns:
+    /// 
+    /// a `Result` type with the success variant containing a `TextModerationResult` and the error
+    /// variant containing a `Box<dyn Error>`.
     pub async fn create_moderation(
         self,
         parameters: TextModerationParameters,
