@@ -319,6 +319,19 @@ impl OpenAI {
             .expect("Failed to parse image response"))
     }
 
+    /// The function `create_embedding` sends a POST request to the OpenAI API to create an embedding,
+    /// using the provided parameters, and returns the resulting embedding response.
+    ///
+    /// Arguments:
+    ///
+    /// * `parameters`: The `parameters` parameter in the `create_embedding` function is of type
+    /// `EmbeddingParameters`. It is an input parameter that contains the necessary information for
+    /// creating an embedding.
+    ///
+    /// Returns:
+    ///
+    /// a Result type with the success variant containing an EmbeddingResponse or the error variant
+    /// containing a Box<dyn Error>.
     pub async fn create_embedding(
         self,
         parameters: EmbeddingParameters,
