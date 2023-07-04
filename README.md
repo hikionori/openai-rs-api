@@ -34,4 +34,4 @@ Unofficial api client for OpenAI
    - [x] List fine-tune events
    - [x] Delete fine-tune model
 10. Moderations
-	- [ ] Create moderation
+   - [x] Create moderation
