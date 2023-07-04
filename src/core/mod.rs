@@ -7,12 +7,13 @@ use awc::Client;
 use rustls::{ClientConfig, OwnedTrustAnchor, RootCertStore};
 
 use self::models::{
+    audio::{TextResponse, TranscriptionParameters, TranslationParameters},
     chat::{ChatParameters, ChatResponse},
     completions::{CompletionParameters, CompletionResponse},
     edits::{EditParameters, EditResponse},
     embeddings::{EmbeddingParameters, EmbeddingResponse},
     images::{ImageCreateParameters, ImageEditParameters, ImageResponse, ImageVariationParameters},
-    list_models::{Model, ModelList}, audio::{TranscriptionParameters, TextResponse, TranslationParameters},
+    list_models::{Model, ModelList},
 };
 
 pub struct OpenAI {
@@ -354,8 +355,22 @@ impl OpenAI {
             .expect("Failed to parse embedding response"))
     }
 
+    /// The function `create_transcription` sends a POST request to the OpenAI API to create a transcription,
+    /// using the provided parameters, and returns the resulting transcription response.
+    ///
+    /// Arguments:
+    ///
+    /// * `parameters`: The `parameters` parameter in the `create_transcription` function is of type
+    /// `TranscriptionParameters`. It is an input parameter that contains the necessary information for
+    /// creating a transcription.
+    ///
+    /// Returns:
+    ///
+    /// a Result type with the success variant containing a TextResponse or the error variant
+    /// containing a Box<dyn Error>.
     pub async fn create_transcription(
-        self, parameters: TranscriptionParameters,
+        self,
+        parameters: TranscriptionParameters,
     ) -> Result<TextResponse, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/audio/transcriptions");
@@ -374,8 +389,22 @@ impl OpenAI {
         Ok(serde_json::from_slice::<TextResponse>(&result).expect("Failed to parse text response"))
     }
 
+    /// The function `create_translation` sends a POST request to the OpenAI API to create a translation,
+    /// using the provided parameters, and returns the resulting translation response.
+    ///
+    /// Arguments:
+    ///
+    /// * `parameters`: The `parameters` parameter in the `create_translation` function is of type
+    /// `TranslationParameters`. It is an input parameter that contains the necessary information for
+    /// creating a translation.
+    ///
+    /// Returns:
+    ///
+    /// a Result type with the success variant containing a TextResponse or the error variant
+    /// containing a Box<dyn Error>.
     pub async fn create_translation(
-        self, parameters: TranslationParameters,
+        self,
+        parameters: TranslationParameters,
     ) -> Result<TextResponse, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/audio/translations");
@@ -393,5 +422,4 @@ impl OpenAI {
 
         Ok(serde_json::from_slice::<TextResponse>(&result).expect("Failed to parse text response"))
     }
-
 }
