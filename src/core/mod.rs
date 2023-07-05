@@ -22,6 +22,7 @@ use self::models::{
     moderations::{TextModerationParameters, TextModerationResult},
 };
 
+#[derive(Clone)]
 pub struct OpenAI {
     pub token: String,
     pub oia_org: String,
