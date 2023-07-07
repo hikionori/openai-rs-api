@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+
+#[cfg(feature = "list_models")]
 pub mod list_models {
     use serde::Deserialize;
 
@@ -58,6 +60,7 @@ pub mod list_models {
     }
 }
 
+#[cfg(feature = "edits")]
 pub mod edits {
     use serde::{Deserialize, Serialize};
 
@@ -155,6 +158,7 @@ pub mod edits {
     }
 }
 
+#[cfg(feature = "completions")]
 pub mod completions {
 
     use serde::{Deserialize, Serialize};
@@ -313,6 +317,7 @@ pub mod completions {
     }
 }
 
+#[cfg(feature = "chat")]
 pub mod chat {
     use serde::{Deserialize, Serialize};
 
@@ -555,6 +560,7 @@ pub mod chat {
     }
 }
 
+#[cfg(feature = "images")]
 pub mod images {
     use serde::{Deserialize, Serialize};
 
@@ -723,6 +729,7 @@ pub mod images {
     }
 }
 
+#[cfg(feature = "embeddings")]
 pub mod embeddings {
     use serde::{Deserialize, Serialize};
 
@@ -791,6 +798,8 @@ pub mod embeddings {
         pub total_tokens: i32,
     }
 }
+
+#[cfg(feature = "audio")]
 pub mod audio {
     use serde::{Deserialize, Serialize};
 
@@ -912,6 +921,7 @@ pub mod audio {
     }
 }
 
+#[cfg(feature = "files")]
 pub mod files {
     use serde::{Deserialize, Serialize};
 
@@ -963,6 +973,7 @@ pub mod files {
     }
 }
 
+#[cfg(feature = "fine_tunes")]
 pub mod fine_tunes {
     use serde::{Deserialize, Serialize};
 
@@ -1257,6 +1268,7 @@ pub mod fine_tunes {
     }
 }
 
+#[cfg(feature = "moderations")]
 pub mod moderations {
     use serde::{Deserialize, Serialize};
 

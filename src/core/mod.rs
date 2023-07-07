@@ -77,6 +77,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a Result object with the type ModelList.
+    #[cfg(feature = "list_models")]
     pub async fn list_models(self) -> Result<ModelList, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/models");
@@ -105,6 +106,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a Result object with the type Model as the Ok variant and Box<dyn Error> as the Err variant.
+    #[cfg(feature = "list_models")]
     pub async fn retrive_model(self, model: String) -> Result<Model, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/models/{}", model);
@@ -134,6 +136,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a `Result` with a `ChatResponse` on success or a `Box<dyn Error>` on failure.
+    #[cfg(feature = "chat")]
     pub async fn create_chat_completions(
         self,
         parameters: ChatParameters,
@@ -167,6 +170,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a `Result` with a `CompletionResponse` on success or a `Box<dyn Error>` on failure.
+    #[cfg(feature = "completions")]
     pub async fn create_completions(
         self,
         parameters: CompletionParameters,
@@ -202,6 +206,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a `Result` with the type `EditResponse` on success or a `Box<dyn Error>` on failure.
+    #[cfg(feature = "edits")]
     pub async fn create_edit(
         self,
         parameters: EditParameters,
@@ -236,6 +241,7 @@ impl OpenAI {
     ///
     /// The function `create_image` returns a `Result` enum with the success case containing an
     /// `ImageResponse` and the error case containing a `Box<dyn Error>`.
+    #[cfg(feature = "images")]
     pub async fn create_image(
         self,
         parameters: ImageCreateParameters,
@@ -271,6 +277,7 @@ impl OpenAI {
     ///
     /// a Result type with the success variant containing an ImageResponse or the error variant
     /// containing a Box<dyn Error>.
+    #[cfg(feature = "images")]
     pub async fn create_image_edit(
         self,
         parameters: ImageEditParameters,
@@ -305,6 +312,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a Result object with the type ImageResponse.
+    #[cfg(feature = "images")]
     pub async fn create_image_variations(
         self,
         parameters: ImageVariationParameters,
@@ -340,6 +348,7 @@ impl OpenAI {
     ///
     /// a Result type with the success variant containing an EmbeddingResponse or the error variant
     /// containing a Box<dyn Error>.
+    #[cfg(feature = "embeddings")]
     pub async fn create_embedding(
         self,
         parameters: EmbeddingParameters,
@@ -375,6 +384,7 @@ impl OpenAI {
     ///
     /// a Result type with the success variant containing a TextResponse or the error variant
     /// containing a Box<dyn Error>.
+    #[cfg(feature = "audio")]
     pub async fn create_transcription(
         self,
         parameters: TranscriptionParameters,
@@ -409,6 +419,7 @@ impl OpenAI {
     ///
     /// a Result type with the success variant containing a TextResponse or the error variant
     /// containing a Box<dyn Error>.
+    #[cfg(feature = "audio")]
     pub async fn create_translation(
         self,
         parameters: TranslationParameters,
@@ -437,6 +448,7 @@ impl OpenAI {
     ///
     /// The function `list_files` returns a `Result` containing either a `FileList` or a boxed dynamic
     /// error (`Box<dyn Error>`).
+    #[cfg(feature = "files")]
     pub async fn list_files(self) -> Result<FileList, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/files");
@@ -467,6 +479,7 @@ impl OpenAI {
     ///
     /// The function `upload_files` returns a `Result` containing either a `FileData` object or an error
     /// (`Box<dyn Error>`).
+    #[cfg(feature = "files")]
     pub async fn upload_files(self, parameters: FileUpload) -> Result<FileData, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/files");
@@ -497,6 +510,7 @@ impl OpenAI {
     ///
     /// The function `delete_file` returns a `Result` containing either a `DeleteResponse` or a boxed
     /// dynamic error (`Box<dyn Error>`).
+    #[cfg(feature = "files")]
     pub async fn delete_file(self, file_id: String) -> Result<DeleteResponse, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/files/{}", file_id);
@@ -526,6 +540,7 @@ impl OpenAI {
     ///
     /// The function `retrieve_file` returns a `Result` containing either a `FileData` object or an
     /// error (`Box<dyn Error>`).
+    #[cfg(feature = "files")]
     pub async fn retrieve_file(self, file_id: String) -> Result<FileData, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/files/{}", file_id);
@@ -557,6 +572,7 @@ impl OpenAI {
     /// content of the file with the given `file_id`. The `Ok` variant of the `Result` contains the file
     /// content as a `String`, while the `Err` variant contains a boxed dynamic error (`Box<dyn
     /// Error>`).
+    #[cfg(feature = "files")]
     pub async fn retrieve_file_content(self, file_id: String) -> Result<String, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/files/{}/content", file_id);
@@ -586,6 +602,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a Result object with the type FineTuneRetriveData.
+    #[cfg(feature = "fine_tunes")]
     pub async fn create_fine_tune(
         self,
         parameters: CreateFineTuneParameters,
@@ -613,6 +630,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a Result object with the type FineTuneList.
+    #[cfg(feature = "fine_tunes")]
     pub async fn list_fine_tunes(self) -> Result<FineTuneList, Box<dyn Error>> {
         let client = self.https_client;
         let url = String::from("https://api.openai.com/v1/fine-tunes");
@@ -644,6 +662,7 @@ impl OpenAI {
     ///
     /// a `Result` type with the success variant containing a `FineTuneRetriveData` object and the error
     /// variant containing a `Box<dyn Error>` object.
+    #[cfg(feature = "fine_tunes")]
     pub async fn retrive_fine_tune(
         self,
         fine_tune_id: String,
@@ -676,6 +695,7 @@ impl OpenAI {
     /// Returns:
     ///
     /// a Result object with the type FineTuneRetriveData.
+    #[cfg(feature = "fine_tunes")]
     pub async fn cancel_fine_tune(
         self,
         fine_tune_id: String,
@@ -712,6 +732,7 @@ impl OpenAI {
     ///
     /// a `Result` type with the `Ok` variant containing a `FineTuneEventList` object and the `Err`
     /// variant containing a `Box<dyn Error>` object.
+    #[cfg(feature = "fine_tunes")]
     pub async fn list_fine_tune_events(
         self,
         fine_tune_id: String,
@@ -748,6 +769,7 @@ impl OpenAI {
     ///
     /// a `Result` enum with the success variant containing a `FineTuneDelete` object or the error
     /// variant containing a `Box<dyn Error>` object.
+    #[cfg(feature = "fine_tunes")]
     pub async fn delete_fine_tune(self, model: String) -> Result<FineTuneDelete, Box<dyn Error>> {
         let client = self.https_client;
         let url = format!("https://api.openai.com/v1/models/{}", model);
@@ -768,18 +790,19 @@ impl OpenAI {
 
     /// The function `create_moderation` sends a POST request to the OpenAI API to create a text
     /// moderation task and returns the result.
-    /// 
+    ///
     /// Arguments:
-    /// 
+    ///
     /// * `parameters`: The `parameters` parameter in the `create_moderation` function is of type
     /// `TextModerationParameters`. It represents the input parameters for the text moderation request.
     /// The specific structure and fields of the `TextModerationParameters` type are not provided in the
     /// code snippet, so it would be
-    /// 
+    ///
     /// Returns:
-    /// 
+    ///
     /// a `Result` type with the success variant containing a `TextModerationResult` and the error
     /// variant containing a `Box<dyn Error>`.
+    #[cfg(feature = "moderations")]
     pub async fn create_moderation(
         self,
         parameters: TextModerationParameters,

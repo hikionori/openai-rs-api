@@ -86,25 +86,12 @@ impl Chat {
         };
         self.messages.push(message.clone());
 
+        let parameters = ChatParameters::new(self.model.clone().into(), self.get_messages());
+
         let response = self
             .oai
             .clone()
-            .create_chat_completions(ChatParameters {
-                model: self.model.clone().into(),
-                messages: self.get_messages(),
-                functions: None,
-                function_call: None,
-                temperature: None,
-                top_p: None,
-                n: None,
-                stream: None,
-                stop: None,
-                max_tokens: None,
-                presence_penalty: None,
-                frequency_penalty: None,
-                logit_bias: None,
-                user: None,
-            })
+            .create_chat_completions(parameters)
             .await
             .unwrap();
 

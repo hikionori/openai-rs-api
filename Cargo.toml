@@ -5,7 +5,7 @@ description = "A Rust wrapper for the OpenAI API"
 documentation = "https://www.docs.rs/openai-rs-api"
 readme = "README.md"
 license = "MIT"
-version = "1.1.0"
+version = "1.1.1"
 edition = "2021"
 keywords = ["ai", "machine-learning", "openai", "library", "api"]
 
@@ -24,3 +24,17 @@ webpki = "0.22.0"
 webpki-roots = "0.23.1"
 serde_with = "3.0.0"
 async-trait = "0.1.70"
+
+[features]
+list_models = []
+chat = []
+completions = []
+embeddings = []
+files = []
+audio = []
+images = []
+edits = []
+fine_tunes = []
+moderations = []
+full = ["list_models", "chat", "completions", "embeddings", "files", "audio", "images", "edits", "fine_tunes", "moderations"]
+default = ["full"]
