@@ -15,12 +15,20 @@ async fn main() {
     let oai = OpenAI::new("API_KEY".to_string(), "API_ORG".to_string());
     let parameters = ChatParameters::new(
         "gpt-3.5-turbo-16k".to_string(),
-        vec![Message {
-            role: "user".to_string(),
-            content: Some("Hello, my name is".to_string()),
-            name: None,
-            function_call: None,
-        }],
+        vec![
+            Message {
+                role: "system".to_string(),
+                content: Some("Helpful assistant".to_string()),
+                name: None,
+                function_call: None,
+            },
+            Message {
+                role: "user".to_string(),
+                content: Some("Hello, my name is".to_string()),
+                name: None,
+                function_call: None,
+            }
+        ],
     );
     let response: ChatResponse = oai.create_chat_completions(parameters).await.unwrap();
     // print answer message
