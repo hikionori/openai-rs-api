@@ -1,7 +1,7 @@
 # OpenAI Rust Api
 Unofficial api client for OpenAI
 
-**[Functions of `core` module](./core.md)**
+**[Functions of `core` module](https://github.com/hikionori/openai-rs-api/blob/dev/core.md)**
 
 #### Example of usage `core` module
 
