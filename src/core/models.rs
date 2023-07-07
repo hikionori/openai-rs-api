@@ -84,6 +84,46 @@ pub mod edits {
         top_p: Option<f32>,
     }
 
+    impl EditParameters {
+        // builder pattern
+        pub fn new(model: String, input: String, instructions: String) -> Self {
+            Self {
+                model,
+                input,
+                instructions,
+                n_of_edits: None,
+                temperature: None,
+                top_p: None,
+            }
+        }
+
+        pub fn n_of_edits(mut self, n_of_edits: i32) -> Self {
+            self.n_of_edits = Some(n_of_edits);
+            self
+        }
+
+        pub fn temperature(mut self, temperature: f32) -> Self {
+            self.temperature = Some(temperature);
+            self
+        }
+
+        pub fn top_p(mut self, top_p: f32) -> Self {
+            self.top_p = Some(top_p);
+            self
+        }
+
+        pub fn build(self) -> EditParameters {
+            EditParameters {
+                model: self.model,
+                input: self.input,
+                instructions: self.instructions,
+                n_of_edits: self.n_of_edits,
+                temperature: self.temperature,
+                top_p: self.top_p,
+            }
+        }
+    }
+
     #[derive(Debug, Deserialize)]
     pub struct EditResponse {
         /// The type of object returned by the API. In this case, it will always be "text_completion".
@@ -345,6 +385,107 @@ pub mod chat {
         pub user: Option<String>,
     }
 
+    impl ChatParameters {
+        // realize the builder pattern
+        pub fn new(model: String, messages: Vec<Message>) -> Self {
+            Self {
+                model,
+                messages,
+                functions: None,
+                function_call: None,
+                temperature: None,
+                top_p: None,
+                n: None,
+                stream: None,
+                stop: None,
+                max_tokens: None,
+                presence_penalty: None,
+                frequency_penalty: None,
+                logit_bias: None,
+                user: None,
+            }
+        }
+
+        pub fn functions(mut self, functions: Vec<Function>) -> Self {
+            self.functions = Some(functions);
+            self
+        }
+
+        pub fn function_call(mut self, function_call: serde_json::Value) -> Self {
+            self.function_call = Some(function_call);
+            self
+        }
+
+        pub fn temperature(mut self, temperature: f32) -> Self {
+            self.temperature = Some(temperature);
+            self
+        }
+
+        pub fn top_p(mut self, top_p: f32) -> Self {
+            self.top_p = Some(top_p);
+            self
+        }
+
+        pub fn n(mut self, n: i32) -> Self {
+            self.n = Some(n);
+            self
+        }
+
+        pub fn stream(mut self, stream: bool) -> Self {
+            self.stream = Some(stream);
+            self
+        }
+
+        pub fn stop(mut self, stop: Vec<String>) -> Self {
+            self.stop = Some(stop);
+            self
+        }
+
+        pub fn max_tokens(mut self, max_tokens: i32) -> Self {
+            self.max_tokens = Some(max_tokens);
+            self
+        }
+
+        pub fn presence_penalty(mut self, presence_penalty: f32) -> Self {
+            self.presence_penalty = Some(presence_penalty);
+            self
+        }
+
+        pub fn frequency_penalty(mut self, frequency_penalty: f32) -> Self {
+            self.frequency_penalty = Some(frequency_penalty);
+            self
+        }
+
+        pub fn logit_bias(mut self, logit_bias: serde_json::Value) -> Self {
+            self.logit_bias = Some(logit_bias);
+            self
+        }
+
+        pub fn user(mut self, user: String) -> Self {
+            self.user = Some(user);
+            self
+        }
+
+        pub fn build(self) -> ChatParameters {
+            ChatParameters {
+                model: self.model,
+                messages: self.messages,
+                functions: self.functions,
+                function_call: self.function_call,
+                temperature: self.temperature,
+                top_p: self.top_p,
+                n: self.n,
+                stream: self.stream,
+                stop: self.stop,
+                max_tokens: self.max_tokens,
+                presence_penalty: self.presence_penalty,
+                frequency_penalty: self.frequency_penalty,
+                logit_bias: self.logit_bias,
+                user: self.user,
+            }
+        }
+    }
+
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Function {
         /// The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes,
@@ -437,6 +578,42 @@ pub mod images {
         pub user: Option<String>,
     }
 
+    impl ImageCreateParameters {
+        pub fn new(prompt: String) -> Self {
+            Self {
+                prompt,
+                num_images: None,
+                image_size: None,
+                response_format: None,
+                user: None,
+            }
+        }
+
+        pub fn num_images(mut self, num_images: i32) -> Self {
+            self.num_images = Some(num_images);
+            self
+        }
+
+        pub fn image_size(mut self, image_size: String) -> Self {
+            self.image_size = Some(image_size);
+            self
+        }
+
+        pub fn response_format(mut self, response_format: String) -> Self {
+            self.response_format = Some(response_format);
+            self
+        }
+
+        pub fn user(mut self, user: String) -> Self {
+            self.user = Some(user);
+            self
+        }
+
+        pub fn build(self) -> ImageCreateParameters {
+            self
+        }
+    }
+
     #[derive(Debug, Serialize, Deserialize)]
     pub struct ImageEditParameters {
         /// The image to edit. Must be a valid PNG file, less than 4MB, and square.
@@ -463,6 +640,50 @@ pub mod images {
         /// [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
         #[serde(skip_serializing_if = "Option::is_none")]
         pub user: Option<String>,
+    }
+
+    impl ImageEditParameters {
+        // builder pattern
+        pub fn new(image: String, prompt: String) -> Self {
+            Self {
+                image,
+                mask: None,
+                prompt,
+                num_images: None,
+                image_size: None,
+                response_format: None,
+                user: None,
+            }
+        }
+
+        pub fn mask(mut self, mask: String) -> Self {
+            self.mask = Some(mask);
+            self
+        }
+
+        pub fn num_images(mut self, num_images: i32) -> Self {
+            self.num_images = Some(num_images);
+            self
+        }
+
+        pub fn image_size(mut self, image_size: String) -> Self {
+            self.image_size = Some(image_size);
+            self
+        }
+
+        pub fn response_format(mut self, response_format: String) -> Self {
+            self.response_format = Some(response_format);
+            self
+        }
+
+        pub fn user(mut self, user: String) -> Self {
+            self.user = Some(user);
+            self
+        }
+
+        pub fn build(self) -> ImageEditParameters {
+            self
+        }
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -520,6 +741,26 @@ pub mod embeddings {
         pub user: Option<String>,
     }
 
+    impl EmbeddingParameters {
+        // builder pattern
+        pub fn new(model: String, input: String) -> Self {
+            Self {
+                model,
+                input,
+                user: None,
+            }
+        }
+
+        pub fn user(mut self, user: String) -> Self {
+            self.user = Some(user);
+            self
+        }
+
+        pub fn build(self) -> EmbeddingParameters {
+            self
+        }
+    }
+
     #[derive(Debug, Serialize, Deserialize)]
     pub struct EmbeddingResponse {
         /// A string representing the type of object returned. In this case, it should always be "embedding".
@@ -575,6 +816,43 @@ pub mod audio {
         pub language: Option<String>,
     }
 
+    impl TranscriptionParameters {
+        pub fn new(file: String, model: String) -> Self {
+            Self {
+                file,
+                model,
+                prompt: None,
+                respone_format: None,
+                temperature: None,
+                language: None,
+            }
+        }
+
+        pub fn prompt(mut self, prompt: String) -> Self {
+            self.prompt = Some(prompt);
+            self
+        }
+
+        pub fn respone_format(mut self, respone_format: String) -> Self {
+            self.respone_format = Some(respone_format);
+            self
+        }
+
+        pub fn temperature(mut self, temperature: f32) -> Self {
+            self.temperature = Some(temperature);
+            self
+        }
+
+        pub fn language(mut self, language: String) -> Self {
+            self.language = Some(language);
+            self
+        }
+
+        pub fn build(self) -> TranscriptionParameters {
+            self
+        }
+    }
+
     #[derive(Debug, Serialize)]
     pub struct TranslationParameters {
         /// The audio file object (not file name) to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.
@@ -594,6 +872,37 @@ pub mod audio {
         /// The default is 1.
         #[serde(skip_serializing_if = "Option::is_none")]
         pub temperature: Option<f32>,
+    }
+
+    impl TranslationParameters {
+        pub fn new(file: String, model: String) -> Self {
+            Self {
+                file,
+                model,
+                prompt: None,
+                respone_format: None,
+                temperature: None,
+            }
+        }
+
+        pub fn prompt(mut self, prompt: String) -> Self {
+            self.prompt = Some(prompt);
+            self
+        }
+
+        pub fn respone_format(mut self, respone_format: String) -> Self {
+            self.respone_format = Some(respone_format);
+            self
+        }
+
+        pub fn temperature(mut self, temperature: f32) -> Self {
+            self.temperature = Some(temperature);
+            self
+        }
+
+        pub fn build(self) -> TranslationParameters {
+            self
+        }
     }
 
     #[derive(Debug, Deserialize)]
@@ -714,6 +1023,110 @@ pub mod fine_tunes {
         /// For example, a suffix of "custom-model-name" would produce a model name like ada:ft-your-org:custom-model-name-2022-02-15-04-21-04.
         #[serde(skip_serializing_if = "Option::is_none")]
         pub suffix: Option<String>,
+    }
+
+    impl CreateFineTuneParameters {
+        pub fn new(training_file: String) -> Self {
+            Self {
+                training_file,
+                validation_file: None,
+                model: None,
+                epochs: None,
+                batch_size: None,
+                learning_rate_multiplier: None,
+                prompt_loss_weight: None,
+                compute_classification_metrics: None,
+                classification_n_classes: None,
+                classification_positive_class: None,
+                classification_beta: None,
+                suffix: None,
+            }
+        }
+
+        pub fn validation_file(mut self, validation_file: String) -> Self {
+            self.validation_file = Some(validation_file);
+            self
+        }
+
+        pub fn model(mut self, model: String) -> Self {
+            self.model = Some(model);
+            self
+        }
+
+        pub fn epochs(mut self, epochs: u32) -> Self {
+            self.epochs = Some(epochs);
+            self
+        }
+
+        pub fn batch_size(mut self, batch_size: u32) -> Self {
+            self.batch_size = Some(batch_size);
+            self
+        }
+
+        pub fn learning_rate_multiplier(mut self, learning_rate_multiplier: f32) -> Self {
+            self.learning_rate_multiplier = Some(learning_rate_multiplier);
+            self
+        }
+
+        pub fn prompt_loss_weight(mut self, prompt_loss_weight: f32) -> Self {
+            self.prompt_loss_weight = Some(prompt_loss_weight);
+            self
+        }
+
+        pub fn compute_classification_metrics(
+            mut self,
+            compute_classification_metrics: bool,
+        ) -> Self {
+            self.compute_classification_metrics = Some(compute_classification_metrics);
+            self
+        }
+
+        pub fn classification_n_classes(mut self, classification_n_classes: u32) -> Self {
+            self.classification_n_classes = Some(classification_n_classes);
+            self
+        }
+
+        pub fn classification_positive_class(
+            mut self,
+            classification_positive_class: String,
+        ) -> Self {
+            self.classification_positive_class = Some(classification_positive_class);
+            self
+        }
+
+        pub fn classification_beta(mut self, classification_beta: f32) -> Self {
+            self.classification_beta = Some(classification_beta);
+            self
+        }
+
+        pub fn suffix(mut self, suffix: String) -> Self {
+            self.suffix = Some(suffix);
+            self
+        }
+
+        pub fn build(self) -> Result<CreateFineTuneParameters, String> {
+            if self.validation_file.is_some() && self.compute_classification_metrics.is_none() {
+                return Err("You must set compute_classification_metrics to true if you provide a validation_file.".to_string());
+            }
+
+            if self.classification_n_classes.is_some()
+                && self.classification_positive_class.is_none()
+            {
+                return Err("You must set classification_positive_class if you provide classification_n_classes.".to_string());
+            }
+
+            if self.classification_positive_class.is_some()
+                && self.classification_n_classes.is_none()
+            {
+                return Err("You must set classification_n_classes if you provide classification_positive_class.".to_string());
+            }
+
+            if self.classification_beta.is_some() && self.classification_positive_class.is_none() {
+                return Err("You must set classification_positive_class if you provide classification_beta.".to_string());
+            }
+
+            Ok(self)
+        }
     }
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -853,7 +1266,7 @@ pub mod moderations {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub model: Option<String>,
         /// The text to moderate.
-        pub input: String
+        pub input: String,
     }
 
     #[derive(Debug, Serialize, Deserialize)]
